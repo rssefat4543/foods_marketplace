@@ -28,7 +28,6 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0)
 
     image = CloudinaryField(
-        "product",
         blank=True,
         null=True
     )

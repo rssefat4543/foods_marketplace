@@ -74,16 +74,15 @@
     <!-- TOP -->
     <div class="top-section">
 
-        {% if profile.image and profile.image.url %}
+        {% if profile.image %}
             <img id="avatarPreview"
                  src="{{ profile.image.url }}"
                  class="avatar"
                  alt="profile">
         {% else %}
-            <img id="avatarPreview"
-                 src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default.png"
-                 class="avatar"
-                 alt="default">
+            <div class="avatar d-flex align-items-center justify-content-center">
+                <i class="bi bi-person fs-2 text-secondary"></i>
+            </div>
         {% endif %}
 
         <div>
@@ -195,60 +194,37 @@
 </div>
 {% endif %}
 
-{% if orders %}
-<hr class="my-3">
-<h5 class="fw-bold mb-2">Orders</h5>
-
-{% for o in orders %}
-<div class="border rounded p-2 mb-2">
-    <div class="d-flex justify-content-between">
-        <b>{{ o.product.title }}</b>
-        <span class="badge bg-warning text-dark">{{ o.status }}</span>
-    </div>
-    <div class="small text-muted">
-        Qty: {{ o.quantity }} | Price: {{ o.product.price }}
-    </div>
-    <div class="small">
-        Address: {{ o.address }}
-    </div>
-</div>
-{% endfor %}
-{% else %}
-<p class="text-muted mt-3">No orders yet</p>
-{% endif %}
-
-<!-- ================= JS ================= -->
 <script>
-    let modal;
+let modal;
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const modalEl = document.getElementById('editProfileModal');
-        if (modalEl) {
-            modal = new bootstrap.Modal(modalEl);
-        }
-    });
-
-    function openEditModal() {
-        if (modal) modal.show();
+document.addEventListener("DOMContentLoaded", function () {
+    const modalEl = document.getElementById('editProfileModal');
+    if (modalEl) {
+        modal = new bootstrap.Modal(modalEl);
     }
+});
 
-    function updatePreview() {
-        document.getElementById("usernameText").innerText =
-            document.getElementById("usernameInput").value;
+function openEditModal() {
+    if (modal) modal.show();
+}
 
-        document.getElementById("bioText").innerText =
-            document.getElementById("bioInput").value;
+function updatePreview() {
+    document.getElementById("usernameText").innerText =
+        document.getElementById("usernameInput").value;
 
-        let input = document.getElementById("imageInput");
+    document.getElementById("bioText").innerText =
+        document.getElementById("bioInput").value;
 
-        if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById("avatarPreview").src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
+    let input = document.getElementById("imageInput");
+
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("avatarPreview").src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
     }
+}
 </script>
 
 {% endblock %}

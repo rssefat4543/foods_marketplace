@@ -210,4 +210,3 @@ CHANNEL_LAYERS = {
 CSRF_TRUSTED_ORIGINS = [
     "https://foods-marketplace-uw63.onrender.com"
 ]
-print("CLOUD NAME:", config("CLOUDINARY_CLOUD_NAME"))

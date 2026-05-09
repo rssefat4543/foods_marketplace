@@ -275,6 +275,7 @@ def profile(request, username=None):
         "orders": orders
     })
 
+
 @login_required
 def profile_view(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
@@ -284,6 +285,9 @@ def profile_view(request):
         request.user.save()
 
         profile.bio = request.POST.get("bio")
+
+        if "image" in request.FILES:
+            profile.image = request.FILES["image"]
 
         profile.save()
         return redirect("profile")

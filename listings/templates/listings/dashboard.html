@@ -196,14 +196,21 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const fast = params.get("fast");
 
     const loader = document.getElementById("productLoader");
     const content = document.getElementById("productContent");
 
-    if (loader) loader.style.display = "none";
-    if (content) content.classList.remove("hidden");
-
+    if (fast === "1") {
+        if (loader) loader.style.display = "none";
+        if (content) content.classList.remove("hidden");
+    } else {
+        setTimeout(() => {
+            if (loader) loader.style.display = "none";
+            if (content) content.classList.remove("hidden");
+        }, 300);
+    }
 });
 </script>
-
 {% endblock %}
