@@ -1,38 +1,20 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-3 sm:px-6">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-6">
 
-    <div class="
-        w-full
-        max-w-md
-        bg-white
-        p-6 sm:p-8
-        rounded-3xl
-        shadow-2xl
-        sm:shadow-lg
-    ">
+    <div class="w-full max-w-xl bg-white p-12 rounded-3xl shadow-2xl">
 
-        <h2 class="text-2xl sm:text-xl font-bold text-center mb-6 text-gray-800">
+        <h2 class="text-5xl font-bold text-center mb-12 text-gray-800">
             Login
         </h2>
 
-        <form method="POST" class="space-y-5">
+        <form method="POST" class="space-y-10">
             {% csrf_token %}
 
             <input
                 name="email"
                 placeholder="Email"
-                class="
-                    w-full
-                    p-4
-                    sm:p-3
-                    text-base
-                    border
-                    rounded-xl
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-blue-500
-                "
+                class="w-full p-8 text-2xl border rounded-3xl focus:outline-none focus:ring-4 focus:ring-blue-500"
             >
 
             <div class="relative">
@@ -41,26 +23,15 @@
                     name="password"
                     type="password"
                     placeholder="Password"
-                    class="
-                        w-full
-                        p-4
-                        sm:p-3
-                        text-base
-                        border
-                        rounded-xl
-                        pr-14
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-blue-500
-                    "
+                    class="w-full p-8 text-2xl border rounded-3xl pr-24 focus:outline-none focus:ring-4 focus:ring-blue-500"
                 >
 
                 <button
                     type="button"
                     onclick="togglePassword('loginPassword')"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                    class="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
@@ -71,43 +42,32 @@
 
             <button
                 type="submit"
-                class="
-                    w-full
-                    bg-blue-600
-                    text-white
-                    py-4
-                    sm:py-3
-                    rounded-xl
-                    font-semibold
-                    text-lg
-                    sm:text-base
-                    hover:bg-blue-700
-                    transition
-                "
+                class="w-full bg-blue-600 text-white py-8 rounded-3xl font-bold text-3xl hover:bg-blue-700 transition"
             >
                 Login
             </button>
         </form>
-{% if messages %}
-<div class="mt-4 space-y-2">
-    {% for message in messages %}
-        {% if request.resolver_match.url_name == 'login' %}
-        <div class="p-4 rounded-xl text-sm bg-red-100 text-red-700">
-            {{ message }}
+
+        {% if messages %}
+        <div class="mt-10 space-y-4">
+            {% for message in messages %}
+                {% if request.resolver_match.url_name == 'login' %}
+                <div class="p-6 rounded-2xl text-xl bg-red-100 text-red-700">
+                    {{ message }}
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
         {% endif %}
-    {% endfor %}
-</div>
-{% endif %}
 
-        <div class="mt-6 text-center text-sm space-y-2">
-            <a href="{% url 'forgot' %}" class="text-blue-600 hover:underline">
+        <div class="mt-12 text-center text-2xl space-y-6">
+            <a href="{% url 'forgot' %}" class="text-blue-600">
                 Forgot Password?
             </a>
 
             <p class="text-gray-600">
                 Don’t have an account?
-                <a href="{% url 'register' %}" class="text-blue-600 font-medium">
+                <a href="{% url 'register' %}" class="text-blue-600 font-bold">
                     Register
                 </a>
             </p>
