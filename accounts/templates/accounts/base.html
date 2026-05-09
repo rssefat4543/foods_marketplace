@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace</title>
 
-    <!-- Tailwind (keep your design same) -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons (for clean search icon) -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
@@ -55,109 +55,74 @@
 <!-- NAVBAR -->
 <div class="bg-white shadow-md sticky top-0 z-50 w-full">
 
-    <!-- MAIN ROW -->
     <div class="container-fluid px-3 py-3">
-
         <div class="d-flex align-items-center justify-content-between gap-3">
 
-            <!-- LEFT: LOGO -->
+            <!-- LOGO -->
             <a href="{% url 'listings:dashboard' %}"
                class="fw-bold fs-5 text-dark text-decoration-none flex-shrink-0">
                 Marketplace
             </a>
 
-            <!-- CENTER: SEARCH (DESKTOP ONLY) -->
+            <!-- SEARCH (DESKTOP) -->
             <div class="d-none d-md-flex flex-grow-1 mx-3">
-
-                <form method="GET"
-                      action="{% url 'listings:dashboard' %}"
-                      class="w-100">
-
-                    <input type="text"
-                           name="q"
+                <form method="GET" action="{% url 'listings:dashboard' %}" class="w-100">
+                    <input type="text" name="q"
                            placeholder="Search products..."
                            class="form-control rounded-pill px-3 py-2">
                 </form>
-
             </div>
 
-            <!-- RIGHT: ACTIONS -->
+            <!-- RIGHT ACTIONS -->
             <div class="d-flex align-items-center gap-3 flex-shrink-0">
 
                 <!-- MOBILE SEARCH ICON -->
-                <button class="btn btn-sm d-md-none"
+                <button type="button" class="btn btn-sm d-md-none"
                         onclick="toggleMobileSearch()">
                     <i class="bi bi-search fs-5"></i>
                 </button>
 
                 <a href="{% url 'chat:notifications' %}" class="icon-btn">
-    <i class="bi bi-chat-dots-fill"></i>
-</a>
+                    <i class="bi bi-chat-dots-fill"></i>
+                </a>
 
                 <a href="{% url 'listings:add_product' %}"
                    class="btn btn-success btn-sm px-3">
                     + Add
                 </a>
 
-<!-- PROFILE -->
-<a href="{% url 'profile_view' %}">
-    <div class="rounded-circle overflow-hidden"
-         style="width:45px; height:45px;">
-
-        {% if nav_profile and nav_profile.image and nav_profile.image.url %}
-            <img src="{{ nav_profile.image.url }}"
-                 class="w-100 h-100"
-                 style="object-fit: cover;">
-        {% else %}
-            <img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/default_avatar.png"
-                 class="w-100 h-100"
-                 style="object-fit: cover;">
-{% endif %}
-
-    </div>
-</a>
+                <!-- PROFILE -->
+                <a href="{% url 'profile_view' %}">
+                    <div class="rounded-circle overflow-hidden"
+                         style="width:45px; height:45px;">
+                        {% if nav_profile and nav_profile.image and nav_profile.image.url %}
+                            <img src="{{ nav_profile.image.url }}"
+                                 class="w-100 h-100"
+                                 style="object-fit: cover;">
+                        {% else %}
+                            <img src="/media/default.png"
+                                 class="w-100 h-100"
+                                 style="object-fit: cover;">
+                        {% endif %}
+                    </div>
+                </a>
 
             </div>
-
         </div>
-
     </div>
 
     <!-- MOBILE SEARCH -->
-<!-- MOBILE SEARCH -->
-<div id="mobileSearchWrap" class="d-md-none px-3 pb-3 d-none mt-2">
-
-    <form method="GET"
-          action="{% url 'listings:dashboard' %}">
-
-        <input type="text"
-               id="mobileSearchInput"
-               name="q"
-               placeholder="Search products..."
-               class="form-control rounded-pill">
-
-    </form>
+    <div id="mobileSearchWrap" class="d-md-none px-3 pb-3 d-none">
+        <form method="GET" action="{% url 'listings:dashboard' %}">
+            <input type="text"
+                   name="q"
+                   placeholder="Search products..."
+                   class="form-control rounded-pill">
+        </form>
+    </div>
 
 </div>
-
-</div>
-    <!-- MOBILE SEARCH BOX -->
-    <form id="mobileSearch"
-          method="GET"
-          action="{% url 'listings:dashboard' %}"
-          class="hidden md:hidden px-3 pb-3">
-
-        <input type="text"
-               name="q"
-               placeholder="Search products..."
-               class="w-full border rounded-full px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-400">
-    </form>
-
-</div>
-
 {% endif %}
-<!-- GLOBAL BACK/FORWARD NAV -->
-
 
 <!-- PAGE CONTENT -->
 <div class="p-3 md:p-4">
@@ -168,37 +133,43 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // hide loader
-    window.addEventListener("load", function () {
-        document.getElementById("globalLoader").style.display = "none";
-    });
-
-    // mobile search toggle
-    function toggleMobileSearch() {
-        document.getElementById("mobileSearch").classList.toggle("hidden");
+    // ALWAYS hide loader safely
+    function hideLoader() {
+        const loader = document.getElementById("globalLoader");
+        if (loader) loader.style.display = "none";
     }
 
-    // form loading effect
+    window.addEventListener("load", hideLoader);
+
+    // fallback: if JS error happens
+    setTimeout(hideLoader, 3000);
+
+    function toggleMobileSearch() {
+        const el = document.getElementById("mobileSearchWrap");
+        if (el) el.classList.toggle("d-none");
+    }
+
+    // form submit loader
     document.querySelectorAll("form").forEach(form => {
         form.addEventListener("submit", function () {
-
-            const btn = form.querySelector("button");
-
-            if (btn) {
-                btn.classList.add("btn-loading");
-                btn.innerHTML = `
-                    <span class="spinner-border spinner-border-sm"></span> Loading
-                `;
-            }
-
-            document.getElementById("globalLoader").style.display = "flex";
+            const loader = document.getElementById("globalLoader");
+            if (loader) loader.style.display = "flex";
         });
     });
+
+    // hide broken images safely
     document.addEventListener("error", function (e) {
-    if (e.target.tagName === "IMG") {
-        e.target.style.display = "none";
-    }
-}, true);
+        if (e.target.tagName === "IMG") {
+            e.target.style.display = "none";
+        }
+    }, true);
+    setTimeout(function () {
+        const loader = document.getElementById("globalLoader");
+        if (loader) {
+            loader.style.display = "none";
+        }
+    }, 3000);
+
 </script>
 
 </body>
