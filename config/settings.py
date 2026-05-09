@@ -19,8 +19,8 @@ SECRET_KEY = config(
     default='django-insecure-nk#l6bm9krv+trvundl4$qj(cjov4bz2@9_7jlh49=tm51d*=_'
 )
 
-#DEBUG = config('DEBUG', default=False, cast=bool)
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+
 ALLOWED_HOSTS = [
     "foods-marketplace-uw63.onrender.com",
     ".onrender.com",
