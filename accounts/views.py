@@ -278,7 +278,9 @@ def profile(request, username=None):
 @login_required
 def profile_view(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-
+    if profile.image and not profile.image.url.startswith("http"):
+        profile.image = None
+        profile.save()
     if request.method == "POST":
         request.user.username = request.POST.get("username")
         request.user.save()
