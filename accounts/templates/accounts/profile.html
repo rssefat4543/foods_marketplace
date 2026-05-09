@@ -76,15 +76,12 @@
     <!-- TOP -->
     <div class="top-section">
 
-        {% if profile.image %}
-            <img id="avatarPreview"
-                 src="{{ profile.image.url }}"
-                 class="avatar">
-        {% else %}
-            <img id="avatarPreview"
-                 src="/media/default.png"
-                 class="avatar">
-        {% endif %}
+{% if profile.image %}
+    <img src="{{ profile.image.url }}" class="avatar">
+{% else %}
+    <img src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default_profile.png"
+         class="avatar">
+{% endif %}
 
         <div>
             <p class="username" id="usernameText">
