@@ -172,18 +172,16 @@ function updateCart(id, action) {
         let qty = document.getElementById(`qty-${id}`);
         let total = document.getElementById("cart-total");
 
-        if (data.deleted) {
+
+        if (data.deleted || data.quantity === 0) {
             card.remove();
         } else {
             qty.innerText = data.quantity;
         }
 
-        total.innerText = "Total: ৳ " + data.total;
-
+        total.innerText = "Total: ? " + data.total;
     });
-
 }
-
 // OPEN MODAL
 function openCheckout(){
 
