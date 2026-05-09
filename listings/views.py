@@ -41,20 +41,27 @@ def dashboard(request):
 def add_product(request):
     if request.method == "POST":
 
-        Product.objects.create(
+        image = request.FILES.get("image")
+
+        print("FILES:", request.FILES)   # 🔍 DEBUG (temporary)
+
+        product = Product(
             owner=request.user,
             title=request.POST.get("title"),
             description=request.POST.get("description"),
             category=request.POST.get("category"),
-            price=request.POST.get("price"),
-            stock=request.POST.get("stock"),
-            image=request.FILES.get("image")
+            price=request.POST.get("price") or 0,
+            stock=request.POST.get("stock") or 0,
         )
 
-        return redirect(reverse("listings:dashboard") + "?fast=1")
+        if image:
+            product.image = image
+
+        product.save()
+
+        return redirect("listings:dashboard")
 
     return render(request, "listings/add_product.html")
-
 @login_required
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
