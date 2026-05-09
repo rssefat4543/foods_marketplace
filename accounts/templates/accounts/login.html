@@ -1,55 +1,124 @@
-{% extends 'accounts/base.html' %}
-{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
 
-<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-3 sm:px-6">
 
-<h2 class="text-xl font-bold mb-4">Login</h2>
+    <div class="
+        w-full
+        max-w-md
+        bg-white
+        p-6 sm:p-8
+        rounded-3xl
+        shadow-2xl
+        sm:shadow-lg
+    ">
 
-<form method="POST">
-    {% csrf_token %}
+        <h2 class="text-2xl sm:text-xl font-bold text-center mb-6 text-gray-800">
+            Login
+        </h2>
 
-    <input name="email" placeholder="Email" class="w-full p-3 border mb-3">
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
 
-  
-    <div class="relative mb-3">
-        <input id="loginPassword" name="password" type="password"
-               placeholder="Password"
-               class="w-full p-3 border pr-10">
+            <input
+                name="email"
+                placeholder="Email"
+                class="
+                    w-full
+                    p-4
+                    sm:p-3
+                    text-base
+                    border
+                    rounded-xl
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-blue-500
+                "
+            >
 
-        <button type="button"
-                onclick="togglePassword('loginPassword', this)"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <div class="relative">
+                <input
+                    id="loginPassword"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    class="
+                        w-full
+                        p-4
+                        sm:p-3
+                        text-base
+                        border
+                        rounded-xl
+                        pr-14
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                >
 
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
-                <circle cx="12" cy="12" r="3"/>
-            </svg>
+                <button
+                    type="button"
+                    onclick="togglePassword('loginPassword')"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
 
-        </button>
-    </div>
-
-    <button class="w-full bg-blue-600 text-white p-3">Login</button>
-</form>
-
-
-
-<div class="mt-3 text-sm text-center">
-    <a href="{% url 'forgot' %}" class="text-blue-500">Forgot Password?</a>
-    <p>
-        Don’t have an account?
-        <a href="{% url 'register' %}" class="text-blue-600">Register</a>
-    </p>
+            <button
+                type="submit"
+                class="
+                    w-full
+                    bg-blue-600
+                    text-white
+                    py-4
+                    sm:py-3
+                    rounded-xl
+                    font-semibold
+                    text-lg
+                    sm:text-base
+                    hover:bg-blue-700
+                    transition
+                "
+            >
+                Login
+            </button>
+        </form>
+{% if messages %}
+<div class="mt-4 space-y-2">
+    {% for message in messages %}
+        {% if request.resolver_match.url_name == 'login' %}
+        <div class="p-4 rounded-xl text-sm bg-red-100 text-red-700">
+            {{ message }}
+        </div>
+        {% endif %}
+    {% endfor %}
 </div>
+{% endif %}
 
+        <div class="mt-6 text-center text-sm space-y-2">
+            <a href="{% url 'forgot' %}" class="text-blue-600 hover:underline">
+                Forgot Password?
+            </a>
+
+            <p class="text-gray-600">
+                Don’t have an account?
+                <a href="{% url 'register' %}" class="text-blue-600 font-medium">
+                    Register
+                </a>
+            </p>
+        </div>
+
+    </div>
 </div>
 
 <script>
 function togglePassword(fieldId) {
     const input = document.getElementById(fieldId);
-    input.type = (input.type === "password") ? "text" : "password";
+    input.type = input.type === "password" ? "text" : "password";
 }
 </script>
-
-{% endblock %}
