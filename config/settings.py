@@ -17,6 +17,8 @@ SECRET_KEY = 'django-insecure-nk#l6bm9krv+trvundl4$qj(cjov4bz2@9_7jlh49=tm51d*=_
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
     "foods-marketplace-uw63.onrender.com",
     ".onrender.com"
 ]
@@ -27,6 +29,10 @@ ALLOWED_HOSTS = [
 # ========================
 
 AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 # ========================
@@ -59,7 +65,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "channels",
-
+    'cloudinary',
+    'cloudinary_storage',
     'accounts',
     'listings',
     'chat',
@@ -86,7 +93,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 ASGI_APPLICATION = 'config.asgi.application'
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
 # ========================
 # TEMPLATES
 # ========================

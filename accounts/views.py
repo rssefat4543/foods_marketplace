@@ -141,15 +141,21 @@ def verify_otp(request, user_id):
 
 
 def login_view(request):
+
     if request.method == "POST":
+
         email = request.POST.get("email")
         password = request.POST.get("password")
 
         user = authenticate(
             request,
-            email=email,
+            username=email,
             password=password
         )
+
+        print("EMAIL:", email)
+        print("PASSWORD:", password)
+        print("USER:", user)
 
         if user is None:
             messages.error(request, "Invalid email or password")
@@ -160,6 +166,7 @@ def login_view(request):
             return redirect("login")
 
         login(request, user)
+
         return redirect("/listings/dashboard/")
 
     return render(request, "accounts/login.html")
