@@ -66,6 +66,9 @@
         padding: 6px 12px;
         border-radius: 8px;
     }
+    .avatar {
+    background: #e5e7eb;
+}
 </style>
 
 
@@ -79,8 +82,7 @@
 {% if profile.image %}
     <img src="{{ profile.image.url }}" class="avatar">
 {% else %}
-    <img src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default_profile.png"
-         class="avatar">
+    <div class="avatar"></div>
 {% endif %}
 
         <div>
