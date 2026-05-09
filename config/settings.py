@@ -3,6 +3,7 @@ Django settings for config project.
 """
 
 from pathlib import Path
+from decouple import config
 import os
 import dj_database_url
 
@@ -13,16 +14,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ========================
 # SECURITY
 # ========================
+SECRET_KEY = config(
+    'SECRET_KEY',
+    default='django-insecure-nk#l6bm9krv+trvundl4$qj(cjov4bz2@9_7jlh49=tm51d*=_'
+)
 
-SECRET_KEY = 'django-insecure-nk#l6bm9krv+trvundl4$qj(cjov4bz2@9_7jlh49=tm51d*=_'
-
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
     "foods-marketplace-uw63.onrender.com",
-    ".onrender.com"
+    ".onrender.com",
+    "*"
 ]
 
 
@@ -35,6 +37,8 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 # ========================
@@ -52,6 +56,10 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "test@market.com"
 
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
 # ========================
 # APPS
@@ -98,9 +106,9 @@ ASGI_APPLICATION = 'config.asgi.application'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 # ========================
 # TEMPLATES
@@ -122,13 +130,14 @@ TEMPLATES = [
     },
 ]
 
-
+WSGI_APPLICATION = 'config.wsgi.application'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ========================
 # DATABASE (SQLite)
 # ========================
 
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = config("DATABASE_URL", default=None)
 
 if DATABASE_URL:
     DATABASES = {
