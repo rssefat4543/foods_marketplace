@@ -31,7 +31,7 @@
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #4f46e5;
-        background: #f1f1f1;
+        background: #e5e7eb;
     }
 
     .username {
@@ -66,24 +66,25 @@
         padding: 6px 12px;
         border-radius: 8px;
     }
-    .avatar {
-    background: #e5e7eb;
-}
 </style>
 
-
 <div class="profile-wrap">
-
 <div class="profile-card">
 
     <!-- TOP -->
     <div class="top-section">
 
-{% if profile.image %}
-    <img src="{{ profile.image.url }}" alt="profile">
-{% else %}
-    <img src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default.png">
-{% endif %}
+        {% if profile.image and profile.image.url %}
+            <img id="avatarPreview"
+                 src="{{ profile.image.url }}"
+                 class="avatar"
+                 alt="profile">
+        {% else %}
+            <img id="avatarPreview"
+                 src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default.png"
+                 class="avatar"
+                 alt="default">
+        {% endif %}
 
         <div>
             <p class="username" id="usernameText">
@@ -96,12 +97,10 @@
 
     </div>
 
-
     <!-- BIO -->
     <div class="bio-box" id="bioText">
         {{ profile.bio|default:"No bio added yet." }}
     </div>
-
 
     <!-- ACTIONS -->
     <div class="action-bar">
@@ -117,10 +116,11 @@
            class="btn btn-outline-primary btn-sm-custom">
             My Cart
         </a>
+
         <a href="{% url 'listings:my_orders' %}"
-   class="btn btn-outline-dark btn-sm-custom">
-   My Orders
-</a>
+           class="btn btn-outline-dark btn-sm-custom">
+            My Orders
+        </a>
 
         <a href="/accounts/logout/"
            class="btn btn-outline-danger btn-sm-custom">
@@ -130,16 +130,12 @@
     </div>
 
 </div>
-
 </div>
-
 
 <!-- ================= MODAL ================= -->
 {% if is_owner %}
 <div class="modal fade" id="editProfileModal">
-
   <div class="modal-dialog modal-dialog-centered">
-
     <div class="modal-content" style="border-radius: 14px;">
 
       <div class="modal-header">
@@ -179,7 +175,9 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+            <button type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal">
                 Cancel
             </button>
 
@@ -193,59 +191,48 @@
       </form>
 
     </div>
-
   </div>
 </div>
 {% endif %}
 
 {% if orders %}
-
 <hr class="my-3">
-
 <h5 class="fw-bold mb-2">Orders</h5>
 
 {% for o in orders %}
-
 <div class="border rounded p-2 mb-2">
-
     <div class="d-flex justify-content-between">
         <b>{{ o.product.title }}</b>
-        <span class="badge bg-warning text-dark">
-            {{ o.status }}
-        </span>
+        <span class="badge bg-warning text-dark">{{ o.status }}</span>
     </div>
-
     <div class="small text-muted">
         Qty: {{ o.quantity }} | Price: {{ o.product.price }}
     </div>
-
     <div class="small">
         Address: {{ o.address }}
     </div>
-
 </div>
-
 {% endfor %}
-
 {% else %}
-
 <p class="text-muted mt-3">No orders yet</p>
-
 {% endif %}
+
 <!-- ================= JS ================= -->
 <script>
     let modal;
 
     document.addEventListener("DOMContentLoaded", function () {
-        modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        const modalEl = document.getElementById('editProfileModal');
+        if (modalEl) {
+            modal = new bootstrap.Modal(modalEl);
+        }
     });
 
     function openEditModal() {
-        modal.show();
+        if (modal) modal.show();
     }
 
     function updatePreview() {
-
         document.getElementById("usernameText").innerText =
             document.getElementById("usernameInput").value;
 
@@ -256,11 +243,9 @@
 
         if (input.files && input.files[0]) {
             let reader = new FileReader();
-
             reader.onload = function (e) {
                 document.getElementById("avatarPreview").src = e.target.result;
             };
-
             reader.readAsDataURL(input.files[0]);
         }
     }

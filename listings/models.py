@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.conf import settings
+from cloudinary.models import CloudinaryField
 
 CATEGORY_CHOICES = [
     ('veg', 'Vegetarian'),
@@ -26,7 +27,11 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
 
-    image = models.ImageField(upload_to="products/", null=True, blank=True)
+    image = CloudinaryField(
+        "product",
+        blank=True,
+        null=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

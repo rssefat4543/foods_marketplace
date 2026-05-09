@@ -133,7 +133,12 @@
     <!-- Header -->
     <header class="d-flex flex-column flex-md-row align-items-center align-items-md-end text-center text-md-start gap-3 gap-md-4" style="margin-top: -5rem;">
       <div class="position-relative">
-        <img src="{{ profile.image.url }}" alt="Alex Rivera" class="avatar" />
+        {% if profile.image and profile.image.url %}
+          <img src="{{ profile.image.url }}" class="avatar" />
+        {% else %}
+                <img src="https://res.cloudinary.com/dob1z35ro/image/upload/v1/default.png"
+         class="avatar" />
+{% endif %}
         <span class="status-dot"></span>
       </div>
 

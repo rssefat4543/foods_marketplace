@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from datetime import timedelta
+from cloudinary.models import CloudinaryField
 
 # USER MODEL
 class User(AbstractUser):
@@ -18,7 +19,11 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='profile/', blank=True, null=True)
+    image = CloudinaryField(
+        "profile",
+        blank=True,
+        null=True
+    )
 
 
 # OTP MODEL
