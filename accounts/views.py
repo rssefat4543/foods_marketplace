@@ -9,6 +9,7 @@ from datetime import timedelta
 from django.core.cache import cache
 from .models import OTP, Profile
 from listings.models import Order
+from django.core.mail import send_mail
 
 
 User = get_user_model()
@@ -24,6 +25,13 @@ def generate_otp(email, purpose="verify"):
         email=email,
         code=code,
         purpose=purpose
+    )
+
+    send_mail(
+        subject="Your OTP Code",
+        message=f"Your OTP code is {code}",
+        from_email="noreply@market.com",
+        recipient_list=[email]
     )
 
     print("NEW OTP:", code,flush=True)

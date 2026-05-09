@@ -4,7 +4,6 @@ Django settings for config project.
 
 from pathlib import Path
 import os
-import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,12 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ========================
 
 SECRET_KEY = 'django-insecure-nk#l6bm9krv+trvundl4$qj(cjov4bz2@9_7jlh49=tm51d*=_'
+
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    "*"
     "foods-marketplace-uw63.onrender.com",
     ".onrender.com"
 ]
@@ -44,10 +41,8 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 # ========================
 # EMAIL
 # ========================
-
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "test@market.com"
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # ========================
@@ -68,9 +63,6 @@ INSTALLED_APPS = [
     'accounts',
     'listings',
     'chat',
-
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 
@@ -117,26 +109,15 @@ TEMPLATES = [
 
 
 # ========================
-# DATABASE
+# DATABASE (SQLite)
 # ========================
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True
-        )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
 
 
 # ========================
@@ -162,21 +143,21 @@ USE_TZ = True
 
 
 # ========================
-# STATIC / MEDIA
+# STATIC FILES
 # ========================
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# ========================
+# MEDIA FILES (LOCAL STORAGE)
+# ========================
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-
-# ========================
-# WHITE NOISE
-# ========================
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # ========================
@@ -190,22 +171,7 @@ CHANNEL_LAYERS = {
 }
 
 
-# ========================
-# CLOUDINARY (HARDCODED)
-# ========================
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'your_cloud_name_here',
-    'API_KEY': 'your_api_key_here',
-    'API_SECRET': 'your_api_secret_here',
-}
-
-
 
 CSRF_TRUSTED_ORIGINS = [
     "https://foods-marketplace-uw63.onrender.com"
-
 ]
-
