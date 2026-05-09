@@ -124,10 +124,15 @@ def update_cart(request, pk, action):
     })
 @login_required
 def remove_from_cart(request, pk):
-    item = get_object_or_404(CartItem, pk=pk, user=request.user)
-    item.delete()
-    return redirect("listings:cart")
+    cart_item = CartItem.objects.filter(
+        id=pk,
+        user=request.user
+    ).first()
 
+    if cart_item:
+        cart_item.delete()
+
+    return redirect('listings:cart')
 
 @login_required
 def cart_view(request):
