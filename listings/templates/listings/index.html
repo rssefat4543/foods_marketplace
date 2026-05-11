@@ -128,6 +128,7 @@
                 <a href="#services" class="hover:text-primary nav-link">Services</a>
                 <a href="#team" class="hover:text-primary nav-link">Team</a>
                 <a href="#faqs" class="hover:text-primary nav-link">FAQS</a>
+                <a href="{% url 'profile_view' %}" class="hover:text-primary nav-link">Profile</a>
               </div>
             </div>
             {% if request.user.is_authenticated %}
