@@ -1,7 +1,17 @@
 {% load static %}
 
 <!doctype html>
+<style>
+    .icon-hover:hover {
+  border-color: #3b71ca !important;
+  background-color: white !important;
+  color: #3b71ca !important;
+}
 
+.icon-hover:hover i {
+  color: #3b71ca !important;
+}
+</style>
 <html lang="en" data-theme="light" data-assets-path="assets/" data-layout-path="free-landing-page/" dir="ltr" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
@@ -432,7 +442,7 @@
                 </div>
         
                     <div class="card-actions">
-                      <a href="#" class="btn btn-primary btn-gradient">
+                      <a href="{% url 'listings:product_detail' product.id %}" class="btn btn-primary btn-gradient">
                         View Details
                         <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
                       </a>

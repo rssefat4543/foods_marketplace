@@ -45,10 +45,6 @@
 
                     <div class="price">৳ {{ product.price }}</div>
 
-                    <!-- SELLER INFO -->
-                    <div class="seller">
-                        Seller: {{ p.owner.email }}
-                    </div>
 
                     <!-- DATE ONLY -->
                     <div class="date">
@@ -57,7 +53,7 @@
 
                     <!-- DESCRIPTION (LIMITED) -->
                     <div class="desc">
-                        {{ p.description|truncatechars:60 }}
+                        {{ p.description|truncatechars:40 }}
                     </div>
 
                     <!-- BUTTONS -->
