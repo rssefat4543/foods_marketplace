@@ -1,0 +1,57 @@
+{
+  "editor.wordWrap": "off",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "files.trimFinalNewlines": true,
+  "diffEditor.ignoreTrimWhitespace": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "*.min.js": true,
+    "*.min.css": true,
+    "**/_temp": true
+  },
+  // JS
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  // JSON
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // JSON-specific settings to prevent collapsing
+  "json.format.keepLines": true,
+  // Extension: Prettier
+  "prettier.requireConfig": true,
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.ignorePath": ".prettierignore",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // Extension: Git
+  "git.rebaseWhenSync": true,
+  "git.enableSmartCommit": true,
+  // Extension: npm
+  "npm.packageManager": "yarn",
+  // Tailwind CSS IntelliSense for HTML files
+  "tailwindCSS.includeLanguages": {
+    "html": "html"
+  },
+  "tailwindCSS.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/.hg/**",
+    "**/.svn/**"
+  ]
+}

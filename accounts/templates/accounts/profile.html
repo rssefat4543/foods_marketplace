@@ -3,26 +3,46 @@
 
 <style>
     .profile-wrap {
-        background: #f5f6fa;
-        min-height: 100vh;
-        padding: 40px 15px;
+         min-height: 100vh;
+    padding: 40px 15px;
+
+  
+    background: #f3f4f6;
     }
+
+    .dark .profile-wrap {
+    /* DARK MODE */
+    background: #0f172a;
+}
 
     .profile-card {
         max-width: 750px;
         margin: auto;
-        background: #fff;
         border-radius: 14px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
         padding: 25px;
+
+        /* DARK MODE FRIENDLY */
+        background: white;
+        color: #111;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    }
+
+    .dark .profile-card {
+        background: #1f2937;
+        color: #f9fafb;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
     }
 
     .top-section {
         display: flex;
         align-items: center;
         gap: 15px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #e5e7eb;
         padding-bottom: 15px;
+    }
+
+    .dark .top-section {
+        border-bottom: 1px solid #374151;
     }
 
     .avatar {
@@ -42,16 +62,26 @@
 
     .email {
         font-size: 13px;
-        color: #777;
+        color: #6b7280;
+    }
+
+    .dark .email {
+        color: #9ca3af;
     }
 
     .bio-box {
         margin-top: 15px;
-        background: #f9fafb;
         padding: 12px;
         border-radius: 10px;
         font-size: 14px;
-        color: #555;
+
+        background: #f9fafb;
+        color: #4b5563;
+    }
+
+    .dark .bio-box {
+        background: #111827;
+        color: #d1d5db;
     }
 
     .action-bar {
@@ -117,7 +147,7 @@
         </a>
 
         <a href="{% url 'listings:my_orders' %}"
-           class="btn btn-outline-dark btn-sm-custom">
+           class="btn btn-outline-secondary btn-sm-custom">
             My Orders
         </a>
 
@@ -131,7 +161,7 @@
 </div>
 </div>
 
-<!-- ================= MODAL ================= -->
+<!-- MODAL -->
 {% if is_owner %}
 <div class="modal fade" id="editProfileModal">
   <div class="modal-dialog modal-dialog-centered">
@@ -199,9 +229,7 @@ let modal;
 
 document.addEventListener("DOMContentLoaded", function () {
     const modalEl = document.getElementById('editProfileModal');
-    if (modalEl) {
-        modal = new bootstrap.Modal(modalEl);
-    }
+    if (modalEl) modal = new bootstrap.Modal(modalEl);
 });
 
 function openEditModal() {

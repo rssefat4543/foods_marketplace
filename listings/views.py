@@ -31,7 +31,7 @@ def dashboard(request):
     page = request.GET.get("page")
     products = paginator.get_page(page)
 
-    return render(request, "listings/dashboard.html", {
+    return render(request, "listings/index.html", {
         "products": products
     })
 

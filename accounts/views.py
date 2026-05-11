@@ -129,7 +129,7 @@ def verify_otp(request, user_id):
 
             print("OTP VERIFIED SUCCESSFULLY")
 
-            return redirect("/listings/dashboard/")
+            return redirect("/accounts/dashboard/")
 
         else:
             print("INVALID OTP ENTERED")
@@ -167,7 +167,7 @@ def login_view(request):
 
         login(request, user)
 
-        return redirect("/listings/dashboard/")
+        return redirect("/accounts/dashboard/")
 
     return render(request, "accounts/login.html")
 # FORGOT PASSWORD
@@ -296,7 +296,26 @@ def profile_view(request):
         "profile": profile,
         "is_owner": True
     })
-# DASHBOARD
+
+
 @login_required
 def dashboard(request):
-    return render(request, "listings/dashboard.html")
+    query = request.GET.get("q")
+
+    from  listings.models import Product
+    products = Product.objects.select_related('owner').all().order_by("-id")
+    profiles = Profile.objects.all()
+
+    if query:
+        products = products.filter(title__icontains=query)
+
+   
+    from django.core.paginator import Paginator
+    paginator = Paginator(products, 12)
+    page = request.GET.get("page")
+    products = paginator.get_page(page)
+
+    return render(request, "listings/index.html", {
+        "products": products,
+        "profiles": profiles
+    })

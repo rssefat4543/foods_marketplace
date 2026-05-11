@@ -184,6 +184,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'listings/static',
+]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -208,5 +211,6 @@ CHANNEL_LAYERS = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://foods-marketplace-uw63.onrender.com"
+    "https://foods-marketplace-uw63.onrender.com",
+    "http://localhost:8000"
 ]
