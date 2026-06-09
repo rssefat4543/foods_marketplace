@@ -11,16 +11,19 @@ import json
 from django.http import JsonResponse
 
 
+from django.contrib.auth import get_user_model
+from accounts.models import Profile
 
 
 
-# 🏠 DASHBOARD = FEED
+User = get_user_model()
+
+
 @never_cache
 @login_required
 def dashboard(request):
     query = request.GET.get("q")
 
-    # ⚡ FIX: remove N+1 query problem
     products = Product.objects.select_related('owner').all().order_by("-id")
 
     if query:
@@ -35,7 +38,7 @@ def dashboard(request):
         "products": products
     })
 
-# ADD PRODUCT
+
 
 @login_required
 def add_product(request):
@@ -111,7 +114,6 @@ def update_cart(request, pk, action):
         else:
             item.delete()
 
-    # 🔥 RE-CALCULATE TOTAL AFTER UPDATE
     cart_items = CartItem.objects.filter(user=request.user)
 
     total = sum(i.product.price * i.quantity for i in cart_items if i.product.price)
@@ -180,26 +182,24 @@ def checkout(request):
 def place_order_cart(request):
 
     if request.method != "POST":
-        return JsonResponse({"success": False, "message": "POST required"})
+        return JsonResponse({
+            "success": False,
+            "message": "POST required"
+        })
 
-    # ✅ SAFE JSON PARSE (MAIN FIX)
     try:
         data = json.loads(request.body.decode("utf-8") or "{}")
-    except:
+    except Exception:
         data = {}
 
     address = data.get("address", "")
     payment = data.get("payment_method", "cod")
-
-    cart_items = CartItem.objects.filter(user=request.user)
-
     single_product_id = data.get("product_id")
 
+    cart_items = CartItem.objects.filter(user=request.user)
     last_order_id = None
 
-    # =========================
-    # BUY NOW FLOW
-    # =========================
+
     if single_product_id:
         product = get_object_or_404(Product, id=single_product_id)
 
@@ -212,23 +212,23 @@ def place_order_cart(request):
             status="pending"
         )
 
-        Notification.objects.create(
-            user=product.owner,
-            message=f"New order: {product.title}"
-        )
+        if product.owner and product.owner != request.user:
+            Notification.objects.create(
+                user=product.owner,
+                order=order,
+                message=f"New order received for {product.title}"
+            )
 
         last_order_id = order.id
 
-    # =========================
-    # CART FLOW
-    # =========================
     else:
-
         if not cart_items.exists():
-            return JsonResponse({"success": False, "message": "Cart empty"})
+            return JsonResponse({
+                "success": False,
+                "message": "Cart empty"
+            })
 
         for item in cart_items:
-
             order = Order.objects.create(
                 buyer=request.user,
                 product=item.product,
@@ -238,10 +238,15 @@ def place_order_cart(request):
                 status="pending"
             )
 
-            Notification.objects.create(
-                user=item.product.owner,
-                message=f"New order: {item.product.title}"
-            )
+            owner = item.product.owner
+
+         
+            if owner and owner != request.user:
+                Notification.objects.create(
+                    user=owner,
+                    order=order,
+                    message=f"New order received for {item.product.title}"
+                )
 
             last_order_id = order.id
 
@@ -251,7 +256,6 @@ def place_order_cart(request):
         "success": True,
         "order_id": last_order_id
     })
-# 📦 PRODUCT DETAIL
 @login_required
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -280,7 +284,7 @@ def order_history(request):
 
     orders = Order.objects.filter(buyer=request.user)
 
-    # AJAX request হলে JSON পাঠাও
+
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
 
         data = list(orders.values("id", "status", "product__title"))
@@ -310,7 +314,7 @@ def cancel_order(request, pk):
                 "message": "Already cancelled"
             })
 
-        # ✅ CHANGE STATUS instead of delete
+     
         order.status = "cancelled"
         order.save()
 
@@ -326,24 +330,36 @@ def cancel_order(request, pk):
         })
 @login_required
 def notifications_view(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
 
-        notifications = Notification.objects.filter(
-            user=request.user
-        ).order_by("-created_at")
+    return render(request, "listings/Notificationpage.html", {
+        "notifications": notifications
+    })
 
-        # mark as read
-        notifications.update(is_read=True)
+@login_required
+def open_notification(request, pk):
+    notification = get_object_or_404(
+        Notification,
+        id=pk,
+        user=request.user
+    )
 
-        return render(request, "listings/notifications.html", {
-            "notifications": notifications
-        })
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
 
-
-
-from django.contrib.auth import get_user_model
-from accounts.models import Profile
-
-User = get_user_model()
+    return render(request, "listings/notification_detail.html", {
+        "notification": notification,
+        "order": notification.order
+    })
+@login_required
+def mark_notification_read(request, pk):
+    n = get_object_or_404(Notification, id=pk, user=request.user)
+    n.is_read = True
+    n.save()
+    return redirect("listings:notifications")
 
 @login_required
 def userProfileView(request, id):
@@ -362,4 +378,34 @@ def userProfileView(request, id):
 def userMessage(request,id):
 
     return render(request, 'listings/messages.html',{"id":id})
+@login_required
+def confirm_order(request, pk):
+    order = get_object_or_404(Order, id=pk)
+
+    if order.product.owner != request.user:
+        return redirect("listings:dashboard")
+
+    order.status = "processing"
+    order.save()
+
+    if order.buyer:
+        Notification.objects.create(
+            user=order.buyer,
+            order=order,
+            message=f"Your order for '{order.product.title}' has been confirmed. Delivery in 3–5 days."
+        )
+
+    messages.success(request, "Order confirmed")
+
+    return redirect("listings:notifications")
+@login_required
+def seller_orders(request):
+    orders = Order.objects.filter(
+        product__owner=request.user,
+        status="pending"
+    ).select_related("product", "buyer")
+
+    return render(request, "listings/seller_orders.html", {
+        "orders": orders
+    })
 

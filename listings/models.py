@@ -2,6 +2,9 @@ from django.db import models
 from accounts.models import User
 from django.conf import settings
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
+
+User = settings.AUTH_USER_MODEL
 
 CATEGORY_CHOICES = [
     ('veg', 'Vegetarian'),
@@ -74,11 +77,22 @@ class Order(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="notifications"
+    )
+    order = models.ForeignKey(
+        "Order",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    message = models.CharField(max_length=255)
     is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.message
