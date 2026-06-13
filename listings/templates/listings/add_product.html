@@ -1,7 +1,7 @@
 {% extends "accounts/base.html" %}
 {% block content %}
 
-<div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
+<div class="max-w-xl mx-auto bg-gray-900 p-6 rounded-xl shadow">
 
     <h1 class="text-2xl font-bold mb-4">➕ Add Product</h1>
 
@@ -11,13 +11,13 @@
 
         <input type="text" name="title"
                placeholder="Product Title"
-               class="w-full border p-2 rounded">
+               class="w-full border p-2 rounded bg-gray-800">
 
         <textarea name="description"
                   placeholder="Description"
-                  class="w-full border p-2 rounded"></textarea>
+                  class="w-full border p-2 rounded bg-gray-800"></textarea>
 
-        <select name="category" class="w-full border p-2 rounded">
+        <select name="category" class="w-full border p-2 rounded bg-gray-800">
             <option value="veg">Vegetarian</option>
             <option value="nonveg">Non-Vegetarian</option>
             <option value="dessert">Dessert</option>
@@ -26,14 +26,14 @@
 
         <input type="number" name="price"
                placeholder="Price"
-               class="w-full border p-2 rounded">
+               class="w-full border p-2 rounded bg-gray-800">
 
         <input type="number" name="stock"
                placeholder="Stock"
-               class="w-full border p-2 rounded">
+               class="w-full border p-2 rounded bg-gray-800">
 
         <input type="file" name="image"
-               class="w-full border p-2 rounded">
+               class="w-full border p-2 rounded bg-gray-800">
 
         <button class="bg-green-500 text-white w-full py-2 rounded">
             Publish Product
@@ -42,7 +42,8 @@
     </form>
 
 </div>
-    <script>
+
+<script>
 function showLoader(){
     document.body.style.opacity = "0.6";
 }
