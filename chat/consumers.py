@@ -28,7 +28,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
-
+        
+        await mark_messages_as_read(
+         self.user.id,
+         self.other_user.id
+        )
+        
         history = await get_message_list(self.user.id, self.other_user.id)
 
         await self.send(text_data=json.dumps({
@@ -104,3 +109,23 @@ def get_message_list(user_id, other_id):
         }
         for msg in messages
     ]
+@database_sync_to_async
+def mark_messages_as_read(user_id, other_id):
+    from .models import Message
+
+    print("=" * 50)
+    print("USER ID:", user_id)
+    print("OTHER ID:", other_id)
+
+    qs = Message.objects.filter(
+        sender_id=other_id,
+        receiver_id=user_id,
+        is_read=False
+    )
+
+    print("MATCHED:", qs.count())
+
+    updated = qs.update(is_read=True)
+
+    print("UPDATED:", updated)
+    print("=" * 50)

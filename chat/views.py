@@ -26,6 +26,6 @@ def get_chats_preview(request):
             unique_chats.append(msg)
 
     return render(
-        request,"listings/Notificationpage.html", {"chats": unique_chats}
+        request,"listings/chat_room.html", {"chats": unique_chats}
     )
 
