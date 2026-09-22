@@ -4,7 +4,6 @@ Django settings for config project.
 from logging import DEBUG
 from pathlib import Path
 from decouple import config
-import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -138,24 +137,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # DATABASE (SQLite)
 # ========================
 
-
-DATABASE_URL = config("DATABASE_URL", default=None)
-
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=not DEBUG
-        )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
+
 # ========================
 # PASSWORD VALIDATION
 # ========================
@@ -211,6 +199,6 @@ CHANNEL_LAYERS = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://foods-marketplace-uw63.onrender.com",
+    
     "http://localhost:8000"
 ]
