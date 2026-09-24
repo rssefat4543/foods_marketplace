@@ -46,7 +46,14 @@
                     onclick="viewOrder({{ o.id }})">
                 View Details
             </button>
-
+            
+<div>
+    <a href="{% url 'listings:user_profile' o.product.owner.id %}"
+       class="btn btn-outline-light btn-sm text-dark">
+        Profile
+    </a>
+</div>
+            
             {% if o.status != "cancelled" and o.status != "delivered" %}
             <button class="btn btn-sm btn-outline-danger"
                     onclick="cancelOrder({{ o.id }})">
@@ -71,9 +78,10 @@
 <!-- MODAL -->
 <div class="modal fade" id="orderModal">
   <div class="modal-dialog">
-    <div class="modal-content p-3" id="orderDetailBox"></div>
+    <div class="modal-content p-3 text-dark" id="orderDetailBox"></div>
   </div>
 </div>
+
 
 <script>
 

@@ -1,7 +1,7 @@
 {% extends 'accounts/base.html' %}
 {% block content %}
 
-<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+<div class="max-w-md mx-auto bg-gray-100p-6 rounded shadow">
 <h2 class="text-xl font-bold mb-4">Verify OTP</h2>
 
 {% if messages %}
@@ -17,7 +17,7 @@
 <form method="POST">
     {% csrf_token %}
 
-    <input name="otp" placeholder="Enter OTP" class="w-full p-3 border mb-3">
+    <input name="otp" placeholder="Enter OTP" class="w-full p-3 border mb-3 text-gray-700">
 
     <button class="w-full bg-blue-600 text-white p-3">Verify</button>
 </form>
