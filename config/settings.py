@@ -105,12 +105,13 @@ ROOT_URLCONF = 'config.urls'
 ASGI_APPLICATION = 'config.asgi.application'
 
 
-
 cloudinary.config(
     cloud_name=config("CLOUDINARY_CLOUD_NAME"),
     api_key=config("CLOUDINARY_API_KEY"),
     api_secret=config("CLOUDINARY_API_SECRET"),
 )
+
+
 # ========================
 # TEMPLATES
 # ========================
@@ -119,6 +120,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -132,7 +134,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 # ========================
 # DATABASE (SQLite)
 # ========================
@@ -143,6 +148,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 # ========================
 # PASSWORD VALIDATION
@@ -172,7 +178,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_DIRS = [
+    BASE_DIR / 'static',
     BASE_DIR / 'listings/static',
 ]
 
@@ -182,8 +190,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ========================
 # MEDIA FILES (LOCAL STORAGE)
 # ========================
-
-
 
 
 # ========================
@@ -197,8 +203,6 @@ CHANNEL_LAYERS = {
 }
 
 
-
 CSRF_TRUSTED_ORIGINS = [
-    
     "http://localhost:8000"
 ]

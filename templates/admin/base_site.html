@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if subtitle %}{{ subtitle }} | {% endif %}
+    {{ title }} | Food Marketplace Admin
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'admin/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="branding">
+    <div class="admin-brand-wrapper">
+        <div class="admin-brand-icon">
+            <span>FM</span>
+        </div>
+
+        <div class="admin-brand-text">
+            <h1>
+                <a href="{% url 'admin:index' %}">
+                    Food Marketplace
+                </a>
+            </h1>
+            <span>Management Panel</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+    <div class="admin-top-actions">
+        <a href="/" class="admin-site-link">
+            View Website
+        </a>
+    </div>
+{% endblock %}
